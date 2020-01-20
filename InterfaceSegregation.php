@@ -1,22 +1,50 @@
 <?php
 declare(strict_types=1);
 
-interface Worker 
+interface Worker
 {
-    public function work();
+    public function manage();
+}
+
+interface SleepAble
+{
     public function sleep();
 }
 
-class HumanWorker implements Worker
+interface Workable
+{
+    public function work();
+}
+
+class HumanWorker implements Worker, Workable, SleepAble
 {
     public function work()
     {
-        echo 'work';
+        echo 'work' . PHP_EOL;
     }
 
     public function sleep()
     {
-        echo 'sleep';
+        echo 'sleep' . PHP_EOL;
+    }
+
+    public function manage()
+    {
+        $this->work();
+        $this->sleep();
+    }
+}
+
+class AndroidWorker implements Worker, Workable
+{
+    public function work()
+    {
+        echo 'work' . PHP_EOL;
+    }
+
+    public function manage()
+    {
+        $this->work();
     }
 }
 
@@ -24,10 +52,10 @@ class Manager
 {
     public function hire(Worker $worker)
     {
-        $worker->work();
-        $worker->sleep();
+        $worker->manage() . PHP_EOL;
     }
 } 
 
 $manager = new Manager;
 $manager->hire(new HumanWorker);
+$manager->hire(new AndroidWorker);
